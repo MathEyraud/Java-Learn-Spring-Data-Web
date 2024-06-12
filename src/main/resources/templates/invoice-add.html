@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Invoice Form</title>
+    </head>
+
+    <body>
+
+        <h1>Invoice Form</h1>
+
+        <form th:action="@{/invoice/add-success}" th:object="${invoiceForm}" method="post">
+
+            <div>
+                <label for="customerName">Customer Name:</label>
+                <input type="text" id="customerName" th:field="*{customerName}" /><br/>
+            </div>
+            <div th:if="${#fields.hasErrors('customerName')}" th:errors="*{customerName}"></div>
+
+            <div>
+                <label for="orderNumber">Order Number:</label>
+                <input type="text" id="orderNumber" th:field="*{orderNumber}" /><br/>
+            </div>
+            <div th:if="${#fields.hasErrors('orderNumber')}" th:errors="*{orderNumber}"></div>
+
+            <div>
+                <button type="submit">Submit</button>
+            </div>
+
+
+        </form>
+
+    </body>
+</html>

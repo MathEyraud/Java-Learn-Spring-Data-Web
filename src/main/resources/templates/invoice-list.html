@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Gestion des factures</title>
+        <link th:href="@{/css/style.css}" rel="stylesheet">
+    </head>
+
+    <body>
+
+        <!-- VERSION SANS JS
+            <h1>List of Invoices</h1>
+            <a th:href="@{'/invoice/add'}">Ajouter une facture</a>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Invoice number</th>
+                        <th>Customer Name</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr th:each="invoice : ${invoices}">
+
+                        <td>
+                            <a th:href="@{'/invoice/' + ${invoice.number}}" th:text="${invoice.number}">number</a>
+                        </td>
+                        <td th:text="${invoice.customerName}">customerName</td>
+                    </tr>
+                </tbody>
+
+            </table>
+        -->
+
+        <!-- VERSION AVEC JS -->
+
+        <h1>Bienvenu(e) dans la page de gestion des factures.</h1>
+        <h2>Actions disponibles : </h2>
+        <ul>
+            <li><a href="/invoice/add">Ajout de facture</a></li>
+        </ul>
+        <section class="container">
+            <div class="left-half">
+                <article id="invoice-list">
+
+                </article>
+            </div>
+            <div class="right-half">
+                <article id="invoice-detail">
+
+                </article>
+            </div>
+        </section>
+
+        <script th:src="@{/js/script.js}"></script>
+
+    </body>
+
+</html>
