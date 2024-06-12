@@ -49,7 +49,7 @@ public class InvoiceControllerWeb {
         System.out.println(" ----- displayListInvoice ----- ");
 
         // Récupérer les données depuis le service
-        List<Invoice> listInvoice = invoiceService.getListInvoice();
+        Iterable<Invoice> listInvoice = invoiceService.getListInvoice();
 
         // Envoyer les données vers le fichier html
         model.addAttribute("invoices",listInvoice);
