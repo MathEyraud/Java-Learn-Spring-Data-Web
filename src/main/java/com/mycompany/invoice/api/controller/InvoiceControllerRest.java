@@ -31,11 +31,11 @@ public class InvoiceControllerRest {
      * METHODS
      */
     @GetMapping
-    public List<Invoice> getAllInvoices(){
+    public Iterable<Invoice> getAllInvoices(){
         System.out.println(" ----- getAllInvoices ----- ");
 
         // Récupérer les données depuis le service
-        List<Invoice> listInvoice = invoiceService.getListInvoice();
+        Iterable<Invoice> listInvoice = invoiceService.getListInvoice();
 
         // Retourner les données
         return listInvoice;
