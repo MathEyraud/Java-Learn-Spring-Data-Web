@@ -1,67 +1,132 @@
-
+// Récupère les données de l'endpoint '../invoice'
 fetch('../invoice')
-    .then(res => res.json())
+    .then(res => res.json()) // Convertit la réponse en JSON
     .then(res => {
+
+        // Obtient l'élément HTML avec l'ID 'invoice-list'
         var invoiceListNode = document.getElementById('invoice-list');
+
+        // Efface tout contenu existant dans l'élément 'invoice-list'
         invoiceListNode.innerHTML = "";
 
+        // Crée un nouvel élément de tableau
         var table = document.createElement("table");
-        table.setAttribute("border","1");
+
+        // Définit l'attribut border du tableau à 1
+        table.setAttribute("border", "1");
+
+        // Ajoute le tableau à l'élément 'invoice-list'
         invoiceListNode.appendChild(table);
 
+        // Parcourt la liste des factures reçues de l'API
         res.forEach(invoice => {
 
+            // Crée une nouvelle ligne de tableau
             var tr = document.createElement("tr");
+
+            // Ajoute la ligne au tableau
             table.appendChild(tr);
 
+            // Crée une nouvelle cellule de tableau pour le numéro de facture
             var td = document.createElement("td");
+
+            // Crée un nœud de texte avec le numéro de la facture
             var text = document.createTextNode(`${invoice.number}`);
+
+            // Ajoute le nœud de texte à la cellule de tableau
             td.appendChild(text);
+
+            // Ajoute la cellule de tableau à la ligne
             tr.appendChild(td);
 
+            // Crée une nouvelle cellule de tableau pour le nom du client
             td = document.createElement("td");
-            text = document.createTextNode(`${invoice.customerName}`);
+
+            // Crée un nœud de texte avec le nom du client
+            text = document.createTextNode(`${invoice.customer.name}`);
+
+            // Ajoute le nœud de texte à la cellule de tableau
             td.appendChild(text);
+
+            // Ajoute la cellule de tableau à la ligne
             tr.appendChild(td);
 
+            // Crée une nouvelle cellule de tableau pour le bouton 'Détails'
             td = document.createElement("td");
+
+            // Crée un nouvel élément de bouton
             var button = document.createElement("button");
-            button.setAttribute("type","button");
-            button.onclick = function() {
+
+            // Définit l'attribut type du bouton à 'button'
+            button.setAttribute("type", "button");
+
+            // Définit l'événement onclick du bouton pour appeler la fonction showDetail avec le numéro de la facture
+            button.onclick = function () {
                 showDetail(`${invoice.number}`);
             };
-            text = document.createTextNode("Details");
+
+            // Crée un nœud de texte avec le label 'Détails' pour le bouton
+            text = document.createTextNode("Détails");
+
+            // Ajoute le nœud de texte au bouton
             button.appendChild(text);
+
+            // Ajoute le bouton à la cellule de tableau
             td.appendChild(button);
+
+            // Ajoute la cellule de tableau à la ligne
             tr.appendChild(td);
-
         });
-
     });
 
+// Fonction pour afficher les détails d'une facture spécifique
+function showDetail(invoiceNumber) {
 
-function showDetail(invoiceNumber){
+    // Récupère les données de l'endpoint pour le numéro de facture spécifique
     fetch(invoiceNumber)
-    .then(res => res.json())
-    .then(res => {
-        var invoiceDetailNode = document.getElementById('invoice-detail');
-        invoiceDetailNode.innerHTML = "";
+        .then(res => res.json()) // Convertit la réponse en JSON
+        .then(res => {
 
-        var p = document.createElement("p");
-        var text = document.createTextNode(`Number: ${res.number}`);
-        p.appendChild(text);
-        invoiceDetailNode.appendChild(p);
+            // Obtient l'élément HTML avec l'ID 'invoice-detail'
+            var invoiceDetailNode = document.getElementById('invoice-detail');
 
-        p = document.createElement("p");
-        text = document.createTextNode(`Customer name: ${res.customerName}`);
-        p.appendChild(text);
-        invoiceDetailNode.appendChild(p);
+            // Efface tout contenu existant dans l'élément 'invoice-detail'
+            invoiceDetailNode.innerHTML = "";
 
-        p = document.createElement("p");
-        text = document.createTextNode(`Order number: ${res.orderNumber}`);
-        p.appendChild(text);
-        invoiceDetailNode.appendChild(p);
+            // Crée un nouveau paragraphe pour le numéro de facture
+            var p = document.createElement("p");
 
-    });
+            // Crée un nœud de texte avec le numéro de la facture
+            var text = document.createTextNode(`Numéro : ${res.number}`);
+
+            // Ajoute le nœud de texte au paragraphe
+            p.appendChild(text);
+
+            // Ajoute le paragraphe à l'élément 'invoice-detail'
+            invoiceDetailNode.appendChild(p);
+
+            // Crée un nouveau paragraphe pour le nom du client
+            p = document.createElement("p");
+
+            // Crée un nœud de texte avec le nom du client
+            text = document.createTextNode(`Nom du client : ${res.customer.name}`);
+
+            // Ajoute le nœud de texte au paragraphe
+            p.appendChild(text);
+
+            // Ajoute le paragraphe à l'élément 'invoice-detail'
+            invoiceDetailNode.appendChild(p);
+
+            // Crée un nouveau paragraphe pour le numéro de commande
+            p = document.createElement("p");
+
+            // Crée un nœud de texte avec le numéro de commande
+            text = document.createTextNode(`Numéro de commande : ${res.orderNumber}`);
+
+            // Ajoute le nœud de texte au paragraphe
+            p.appendChild(text);
+
+            // Ajoute le paragraphe à l'élément 'invoice-detail'
+            invoiceDetailNode.appendChild(p);
+        });
 }
-//{"threads":[{"position":0,"start":0,"end":1066,"connection":"open"},{"position":2132,"start":1067,"end":2132,"connection":"closed"}],"url":"https://att-b.udemycdn.com/2020-06-03_01-17-54-05b1057fabaea4abd334191ab2db7e7b/original.js?secure=wIgM7IYN5TstNpp9CTi3IA%3D%3D%2C1597369208&filename=script.js","method":"GET","port":443,"downloadSize":2132,"headers":{"date":"Thu, 13 Aug 2020 21:14:49 GMT","content-type":"application/x-javascript","content-length":"2132","connection":"close","x-amz-id-2":"TtxnQ4e6WJTJ06nqaRV+e0L6M5/51TJ4ApQfudjASI85EcD1RNrgwIfliaDZAR7lzXFnw0qBNuQ=","x-amz-request-id":"17D41DB8C98D34DE","last-modified":"Wed, 03 Jun 2020 01:17:55 GMT","etag":"\"ddf4e45f07cbe8ea821a70b5aee4b6d6\"","x-amz-meta-qqfilename":"script.js","x-amz-version-id":"rvxLeUsIaMNk_mpXo607UtjummM3sVTg","x-77-nzt":"Ark73AGNsFf/Yn4KALmYQVMur5D9yncAAA==","x-edge-ip":"185.152.65.83","x-edge-pop":"pragueCZ","x-cache":"HIT","x-age":"30666","server":"CDN77-Turbo","cache-control":"max-age=31536000","content-disposition":"attachment; filename=\"script.js\"","x-lb-ip":"185.59.220.1","x-lb-pop":"frankfurtDE","x-cache-lb":"HIT","x-age-lb":"687714","accept-ranges":"bytes"}}
