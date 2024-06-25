@@ -7,6 +7,9 @@
     </head>
 
     <body>
+
+        <h1>Invoice Details</h1>
+
         <table>
 
             <thead>
@@ -18,10 +21,13 @@
             </thead>
 
             <tbody>
-                <h1>Invoice Details</h1>
-                <td th:text="${invoice.number}">number</td>
-                <td th:text="${invoice.customerName}">customerName</td>
-                <td th:text="${invoice.orderNumber}">orderNumber</td>
+
+                <tr>
+                    <td th:text="${invoice.number}">number</td>
+                    <td th:text="${invoice.customer.name}">customer.name</td>
+                    <td th:text="${invoice.orderNumber}">orderNumber</td>
+                </tr>
+
             </tbody>
 
         </table>

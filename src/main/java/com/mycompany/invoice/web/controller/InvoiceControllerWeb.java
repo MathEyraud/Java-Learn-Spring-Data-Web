@@ -1,17 +1,21 @@
 package com.mycompany.invoice.web.controller;
 
 
+import com.mycompany.invoice.web.entity.Address;
+import com.mycompany.invoice.web.entity.Customer;
 import com.mycompany.invoice.web.entity.Invoice;
+import com.mycompany.invoice.web.service.customer.ICustomerService;
 import com.mycompany.invoice.web.service.IInvoiceService;
 import com.mycompany.invoice.form.InvoiceForm;
+
 import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @Controller
 public class InvoiceControllerWeb {
@@ -20,13 +24,15 @@ public class InvoiceControllerWeb {
      * ATTRIBUTS
      */
     private IInvoiceService invoiceService;
+    private ICustomerService customerService;
 
     /**
      * CONSTRUCTEUR
      */
     @Autowired
-    public InvoiceControllerWeb(IInvoiceService invoiceService){
+    public InvoiceControllerWeb(IInvoiceService invoiceService, ICustomerService customerService){
         this.invoiceService = invoiceService;
+        this.customerService = customerService;
     }
 
     /**
@@ -46,13 +52,13 @@ public class InvoiceControllerWeb {
 
     @GetMapping("/invoice/invoice-list")
     public String displayInvoiceList(Model model){
-        System.out.println(" ----- displayListInvoice ----- ");
+        System.out.println(" ----- InvoiceControllerWeb/displayListInvoice ----- ");
 
         // Récupérer les données depuis le service
         Iterable<Invoice> listInvoice = invoiceService.getListInvoice();
 
         // Envoyer les données vers le fichier html
-        model.addAttribute("invoices",listInvoice);
+        model.addAttribute("invoice",listInvoice);
 
         return "invoice-list";
     }
@@ -70,7 +76,7 @@ public class InvoiceControllerWeb {
         return "invoice-detail";
     }*/
 
-    @PostMapping("/invoice/add-success")
+    @PostMapping("/invoice/add-new-invoice")
     public String createInvoice(
             @Valid
             @ModelAttribute("invoiceForm")
@@ -86,7 +92,34 @@ public class InvoiceControllerWeb {
 
         Invoice invoice = new Invoice();
 
-        invoice.setCustomerName(invoiceForm.getCustomerName());
+        // Todo : Cf message suivant (gestion de création d'utilisateur)
+        // Pour l'ajout d'un client il faut vérifier si le client n'existe pas déja
+        // Dans notre cas on laissera l'utilisateur choisir s'il ajoute un nouveau client
+        // ou s'il en utilise un dans la DB via une liste déroulante
+
+        Customer customer;
+        if (invoiceForm.isNewCustomer()) {
+
+            // Création du nouveau client
+            customer = new Customer();
+            customer.setName(invoiceForm.getCustomerName());
+
+            // Ajout de son adresse
+            Address addressCustomer = new Address(
+                    invoiceForm.getStreet(),
+                    invoiceForm.getStreetNumber(),
+                    invoiceForm.getCity(),
+                    invoiceForm.getZipCode(),
+                    invoiceForm.getCountry()
+            );
+            customer.setAddress(addressCustomer);
+            customer = customerService.create(customer);
+
+        } else {
+            customer = customerService.getCustomerByNumber(invoiceForm.getCustomerId());
+        }
+
+        invoice.setCustomer(customer);
         invoice.setOrderNumber(invoiceForm.getOrderNumber());
 
         // Todo : Normalement il faut gérer les éventuelles erreurs
